@@ -24,9 +24,9 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.util.Log;
 
-import java.io.FileDescriptor;
-
 import kuta.adrian.cv.BuildConfig;
+
+import java.io.FileDescriptor;
 
 /**
  * A simple subclass of {@link ImageWorker} that resizes images from resources given a target width

@@ -83,8 +83,8 @@ import java.util.concurrent.TimeUnit;
  * to supply data for every value; values default to their previous
  * value.
  * </ul>
- * Every {@link #edit} call must be matched by a call to {@link Editor#commit}
- * or {@link Editor#abort}. Committing is atomic: a read observes the full set
+ * Every {@link #edit} call must be matched by a call to {@link DiskLruCache.Editor#commit}
+ * or {@link DiskLruCache.Editor#abort}. Committing is atomic: a read observes the full set
  * of values as they were before or after the commit, but never a mix of values.
  * <p/>
  * <p>Clients call {@link #get} to read a snapshot of an entry. The read will

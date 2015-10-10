@@ -20,13 +20,14 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.os.Build;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,7 +46,7 @@ import kuta.adrian.cv.BuildConfig;
  */
 public abstract class ImageWorker {
 	private static final String TAG = "ImageWorker";
-	private static final int FADE_IN_TIME = 200;
+	private static final int FADE_IN_TIME = 500;
 	private static final int MESSAGE_CLEAR = 0;
 	private static final int MESSAGE_INIT_DISK_CACHE = 1;
 	private static final int MESSAGE_FLUSH = 2;
@@ -125,7 +126,7 @@ public abstract class ImageWorker {
 	 * Load an image specified by the data parameter into an ImageView (override
 	 * {@link ImageWorker#processBitmap(Object)} to define the processing logic). A memory and
 	 * disk cache will be used if an {@link ImageCache} has been added using
-	 * {@link ImageWorker#addImageCache(FragmentManager, ImageCache.ImageCacheParams)}. If the
+	 * {@link ImageWorker#addImageCache(android.support.v4.app.FragmentManager, ImageCache.ImageCacheParams)}. If the
 	 * image is found in the memory cache, it is set immediately, otherwise an {@link AsyncTask}
 	 * will be created to asynchronously load the bitmap.
 	 *
@@ -273,12 +274,15 @@ public abstract class ImageWorker {
 			// Transition drawable with a transparent drawable and the final drawable
 			final TransitionDrawable td =
 					new TransitionDrawable(new Drawable[]{
-							new ColorDrawable(Color.TRANSPARENT),
+							new ColorDrawable(ContextCompat.getColor(imageView.getContext(), android.R.color.transparent)),
 							drawable
 					});
 			// Set background to loading bitmap
-			imageView.setBackgroundDrawable(
-					new BitmapDrawable(mResources, mLoadingBitmap));
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+				imageView.setBackgroundDrawable(
+						new BitmapDrawable(mResources, mLoadingBitmap));
+			else
+				imageView.setBackground(new BitmapDrawable(mResources, mLoadingBitmap));
 
 			imageView.setImageDrawable(td);
 			td.startTransition(FADE_IN_TIME);
@@ -293,12 +297,13 @@ public abstract class ImageWorker {
 	 * be paused when a ListView or GridView is being scrolled using a
 	 * {@link android.widget.AbsListView.OnScrollListener} to keep
 	 * scrolling smooth.
-	 * <p>
+	 * <p/>
 	 * If work is paused, be sure setPauseWork(false) is called again
 	 * before your fragment or activity is destroyed (for example during
 	 * {@link android.app.Activity#onPause()}), or there is a risk the
 	 * background thread will never finish.
 	 */
+
 	public void setPauseWork(boolean pauseWork) {
 		synchronized (mPauseWorkLock) {
 			mPauseWork = pauseWork;

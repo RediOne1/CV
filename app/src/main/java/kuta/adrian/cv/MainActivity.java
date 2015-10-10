@@ -13,7 +13,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 	private SlidingTabLayout slidingTabLayout;
 	private ImageResizer imageResizer;
 	private ViewPager viewPager;
-	private MyImageSwitcher backgroundImage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,28 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		setContentView(R.layout.activity_main);
 		setUpImageLoader();
 
-		backgroundImage = (MyImageSwitcher) findViewById(R.id.background_image);
-		backgroundImage.setImageResizer(imageResizer);
-		Animation in = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-		Animation out = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
-		backgroundImage.setInAnimation(in);
-		backgroundImage.setOutAnimation(out);
-		backgroundImage.setFactory(new ViewSwitcher.ViewFactory() {
-			@Override
-			public View makeView() {
-				ImageView imageView = new ImageView(getApplicationContext());
-				imageView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-				imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-				return imageView;
-			}
-		});
-		backgroundImage.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-			@Override
-			public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-				v.removeOnLayoutChangeListener(this);
-				backgroundImage.setImageResource(R.drawable.background);
-			}
-		});
+		ImageView backgroundImage = (ImageView) findViewById(R.id.background_image);
+		imageResizer.loadImage(R.drawable.background, backgroundImage);
 
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		viewPager.setAdapter(new NavigationAdapter(getSupportFragmentManager()));
@@ -127,14 +105,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		imageResizer.setImageFadeIn(true);
 	}
 
+	public ImageResizer getImageResizer() {
+		return imageResizer;
+	}
+
 	private void hideStart(View v) {
 		// previously visible view
 
-		// get the center for the clipping circle
+		// get the center for the clipping empty_circle
 		int cx = v.getWidth();
 		int cy = v.getHeight() / 2;
 
-		// get the initial radius for the clipping circle
+		// get the initial radius for the clipping empty_circle
 		int initialRadius = v.getWidth();
 
 		// create the animation (the final radius is zero)
@@ -210,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			hideStart(v);
 			showOverlay();
 			showTabBar();
-			backgroundImage.setImageResource(R.drawable.education);
 		}
 	}
 }

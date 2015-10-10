@@ -5,10 +5,12 @@
                 android:background="#37839b"
                 tools:context=".MainActivity">
 
-	<kuta.adrian.cv.MyImageSwitcher
+	<ImageView
 		android:id="@+id/background_image"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:adjustViewBounds="true"
+		android:scaleType="centerCrop"
 		android:contentDescription="@string/background_image"/>
 
 	<com.google.samples.apps.iosched.ui.widget.SlidingTabLayout
@@ -31,16 +33,6 @@
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentEnd="true"
 		android:layout_alignParentRight="true">
-
-
-		<TextView
-			android:id="@+id/cv_textView"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_gravity="center"
-			android:text="@string/cv"
-			android:textSize="70sp"
-			android:textStyle="bold"/>
 
 		<TextView
 			android:id="@+id/start"

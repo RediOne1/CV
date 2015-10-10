@@ -501,7 +501,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
 	 * @param params The parameters of the task.
 	 * @return This instance of AsyncTask.
 	 * @throws IllegalStateException If {@link #getStatus()} returns either
-	 *                               {@link Status#RUNNING} or {@link Status#FINISHED}.
+	 *                               {@link AsyncTask.Status#RUNNING} or {@link AsyncTask.Status#FINISHED}.
 	 * @see #executeOnExecutor(Executor, Object[])
 	 * @see #execute(Runnable)
 	 */
@@ -536,7 +536,7 @@ public abstract class AsyncTask<Params, Progress, Result> {
 	 * @param params The parameters of the task.
 	 * @return This instance of AsyncTask.
 	 * @throws IllegalStateException If {@link #getStatus()} returns either
-	 *                               {@link Status#RUNNING} or {@link Status#FINISHED}.
+	 *                               {@link AsyncTask.Status#RUNNING} or {@link AsyncTask.Status#FINISHED}.
 	 * @see #execute(Object[])
 	 */
 	public final AsyncTask<Params, Progress, Result> executeOnExecutor(Executor exec,

@@ -24,6 +24,9 @@ import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
+import kuta.adrian.cv.BuildConfig;
+import kuta.adrian.cv.R;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,9 +36,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import kuta.adrian.cv.BuildConfig;
-import kuta.adrian.cv.R;
 
 /**
  * A simple subclass of {@link ImageResizer} that fetches and resizes images fetched from a URL.

@@ -5,4 +5,7 @@
 	<dimen name="text_medium">18sp</dimen>
 
 	<dimen name="tab_height">48dp</dimen>
+	<dimen name="personal_data_drawable_padding">20dp</dimen>
+	<dimen name="personal_data_side_padding">20dp</dimen>
+	<dimen name="personal_data_top_padding">10dp</dimen>
 </resources>

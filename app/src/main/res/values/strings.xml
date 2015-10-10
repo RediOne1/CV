@@ -11,4 +11,20 @@
 	<string name="background_image">Zdjęcie w tle</string>
 	<string name="no_network_connection_toast">Brak połączenia z internetem</string>
 	<string name="experience">Doświadczenie zawodowe</string>
+	<string name="title_activity_maps">Map</string>
+	<string name="university_image">Zdjęcie politechniki Wrocławskiej</string>
+	<string name="secondary_image">Zdjęcie liceum</string>
+	<string name="wroclawUniversity">Wroclaw University of Technology</string>
+	<string name="I_LO_in_tomaszow">I Liceum Ogólnokształcące</string>
+	<string name="my_image">Moje zdjęcie</string>
+	<string name="my_name">Adrian Kuta</string>
+	<string name="android_developer">Android Developer</string>
+	<string name="about_me">Doświadczony programista gotowy ciągle rozwijać swoje umiejętności. Student ostatniego roku Informatyki, na Politechnice Wrocławskiej.</string>
+	<string name="personal_data">Dane osobowe</string>
+	<string name="birthdate">23 listopada 1993r.</string>
+	<string name="wroclaw">Wrocław</string>
+	<string name="mail">redione193@gmail.com</string>
+	<string name="phone_number">+48 518 933 025</string>
+	<string name="programming_languages">Języki programowania</string>
+	<string name="circle">Kółko</string>
 </resources>

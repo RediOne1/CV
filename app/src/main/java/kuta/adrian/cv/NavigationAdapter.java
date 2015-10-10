@@ -12,7 +12,7 @@ import com.github.ksoichiro.android.observablescrollview.CacheFragmentStatePager
  */
 public class NavigationAdapter extends CacheFragmentStatePagerAdapter {
 
-	private static final Fragment[] fragments = new Fragment[]{new EducationFragment(), new EducationFragment(), new ExperienceFragment(), new ExperienceFragment()};
+	private static final Fragment[] fragments = new Fragment[]{new HomeFragment(), new EducationFragment(), new ExperienceFragment(), new ProgrammingLanguagesFragment()};
 
 	public NavigationAdapter(FragmentManager fm) {
 		super(fm);
