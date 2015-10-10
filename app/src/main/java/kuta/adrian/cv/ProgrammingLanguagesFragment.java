@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class ProgrammingLanguagesFragment extends Fragment {
 
+	private ProgrammingLanguagesAdapter programmingLanguagesAdapter;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
@@ -35,7 +37,7 @@ public class ProgrammingLanguagesFragment extends Fragment {
 		programmingLanguageList.add(new ProgrammingLanguage("C / C++", 3));
 		programmingLanguageList.add(new ProgrammingLanguage("JavaScript / C#", 1));
 		programmingLanguageList.add(new ProgrammingLanguage("MySQL / SQLite", 4));
-		ProgrammingLanguagesAdapter programmingLanguagesAdapter = new ProgrammingLanguagesAdapter(getContext(), programmingLanguageList);
+		programmingLanguagesAdapter = new ProgrammingLanguagesAdapter(getContext(), programmingLanguageList);
 		for (int i = 0; i < programmingLanguagesAdapter.getCount(); i++)
 			linearLayout.addView(programmingLanguagesAdapter.getView(i, null, null));
 

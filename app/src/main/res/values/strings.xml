@@ -27,4 +27,6 @@
 	<string name="phone_number">+48 518 933 025</string>
 	<string name="programming_languages">Języki programowania</string>
 	<string name="circle">Kółko</string>
+	<string name="in_tomaszow_maz">w Tomaszowie Mazowieckim</string>
+	<string name="title_activity_main2">Main2Activity</string>
 </resources>

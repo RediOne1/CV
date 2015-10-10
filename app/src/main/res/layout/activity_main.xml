@@ -2,16 +2,8 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#37839b"
+                android:background="@drawable/background"
                 tools:context=".MainActivity">
-
-	<ImageView
-		android:id="@+id/background_image"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:adjustViewBounds="true"
-		android:scaleType="centerCrop"
-		android:contentDescription="@string/background_image"/>
 
 	<com.google.samples.apps.iosched.ui.widget.SlidingTabLayout
 		android:id="@+id/sliding_tabs"
@@ -22,36 +14,5 @@
 		android:id="@+id/viewPager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginTop="@dimen/tab_height"
 		android:visibility="gone"/>
-
-	<io.codetail.widget.RevealFrameLayout
-		android:id="@+id/splash"
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentEnd="true"
-		android:layout_alignParentRight="true">
-
-		<TextView
-			android:id="@+id/start"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom"
-			android:background="#72FFFFFF"
-			android:gravity="center_vertical|end"
-			android:padding="16dp"
-			android:text="@string/start"
-			android:textSize="@dimen/text_medium"/>
-
-	</io.codetail.widget.RevealFrameLayout>
-
-	<View
-		android:id="@+id/blue_overlay"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:layout_alignParentBottom="true"
-		android:background="#220000FF"/>
-
 </RelativeLayout>

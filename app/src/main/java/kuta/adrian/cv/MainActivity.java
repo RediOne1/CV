@@ -8,28 +8,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.ViewSwitcher;
 
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.google.samples.apps.iosched.ui.widget.SlidingTabLayout;
 
-import io.codetail.animation.SupportAnimator;
-import io.codetail.animation.ViewAnimationUtils;
 import kuta.adrian.cv.displayingbitmaps.ImageCache;
 import kuta.adrian.cv.displayingbitmaps.ImageResizer;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
 	private static final String IMAGE_CACHE_DIR = "imageCache";
-	private TextView start;
-	private View overlay;
 	private SlidingTabLayout slidingTabLayout;
 	private ImageResizer imageResizer;
 	private ViewPager viewPager;
@@ -39,9 +28,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setUpImageLoader();
-
-		ImageView backgroundImage = (ImageView) findViewById(R.id.background_image);
-		imageResizer.loadImage(R.drawable.background, backgroundImage);
 
 		viewPager = (ViewPager) findViewById(R.id.viewPager);
 		viewPager.setAdapter(new NavigationAdapter(getSupportFragmentManager()));
@@ -53,32 +39,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		slidingTabLayout.setViewPager(viewPager);
 		slidingTabLayout.setTranslationY(-slidingTabLayout.getHeight());
 
-		slidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-			@Override
-			public void onPageScrolled(int i, float v, int i2) {
-			}
-
-			@Override
-			public void onPageSelected(int i) {
-
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int i) {
-			}
-		});
-
-		start = (TextView) findViewById(R.id.start);
-		start.setOnClickListener(this);
-
-		overlay = findViewById(R.id.blue_overlay);
-		overlay.setScaleY(0f);
 		ScrollUtils.addOnGlobalLayoutListener(slidingTabLayout, new Runnable() {
 			@Override
 			public void run() {
 				slidingTabLayout.setTranslationY(-slidingTabLayout.getHeight());
 			}
 		});
+		slidingTabLayout.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				showTabBar();
+			}
+		}, 500);
 	}
 
 	private void setUpImageLoader() {
@@ -94,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		// resolution that is appropriate for both portrait and landscape. For best image quality
 		// we shouldn't divide by 2, but this will use more memory and require a larger memory
 		// cache.
-		final int longest = (height > width ? height : width) / 2;
+		final int longest = (height > width ? height : width) / 4;
 
 		ImageCache.ImageCacheParams cacheParams =
 				new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
@@ -107,51 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 	public ImageResizer getImageResizer() {
 		return imageResizer;
-	}
-
-	private void hideStart(View v) {
-		// previously visible view
-
-		// get the center for the clipping empty_circle
-		int cx = v.getWidth();
-		int cy = v.getHeight() / 2;
-
-		// get the initial radius for the clipping empty_circle
-		int initialRadius = v.getWidth();
-
-		// create the animation (the final radius is zero)
-		SupportAnimator animator =
-				ViewAnimationUtils.createCircularReveal(v, cx, cy, 0, initialRadius);
-		animator.setDuration(2000);
-		animator = animator.reverse();
-		animator.addListener(new SupportAnimator.AnimatorListener() {
-			@Override
-			public void onAnimationStart() {
-
-			}
-
-			@Override
-			public void onAnimationEnd() {
-				start.setVisibility(View.GONE);
-			}
-
-			@Override
-			public void onAnimationCancel() {
-
-			}
-
-			@Override
-			public void onAnimationRepeat() {
-
-			}
-		});
-		animator.start();
-	}
-
-	private void showOverlay() {
-		Animation animation = AnimationUtils.loadAnimation(this, R.anim.overlay_scale_anim);
-		overlay.setScaleY(1f);
-		overlay.startAnimation(animation);
 	}
 
 	private void showTabBar() {
@@ -184,14 +111,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 			result = getResources().getDimensionPixelSize(resourceId);
 		}
 		return result;
-	}
-
-	@Override
-	public void onClick(View v) {
-		if (v == start) {
-			hideStart(v);
-			showOverlay();
-			showTabBar();
-		}
 	}
 }

@@ -5,17 +5,14 @@ import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,12 +30,13 @@ import kuta.adrian.cv.displayingbitmaps.ImageResizer;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EducationFragment extends Fragment implements OnMapReadyCallback, ObservableScrollViewCallbacks {
+public class EducationFragment extends Fragment implements OnMapReadyCallback {
 
 	private GoogleMap mMap;
 	private CardView university, secondarySchool;
 	private Marker wroclawUniversityMarker, secondarySchoolMarker;
-	private ObservableScrollView observableScrollView;
+	private ScrollView scrollView;
+	private int currentScrollY = 0;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +52,16 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
 				.findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
-		observableScrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
-		observableScrollView.setScrollViewCallbacks(this);
+		scrollView = (ScrollView) view.findViewById(R.id.scroll);
+		scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+			@Override
+			public void onScrollChanged() {
+				currentScrollY = scrollView.getScrollY();
+				university.setTranslationY(currentScrollY);
+				secondarySchool.setTranslationY(currentScrollY / 2);
+			}
+		});
+
 		ImageView transparentImageView = (ImageView) view.findViewById(R.id.transparent_image);
 
 		transparentImageView.setOnTouchListener(new View.OnTouchListener() {
@@ -66,17 +72,17 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 				switch (action) {
 					case MotionEvent.ACTION_DOWN:
 						// Disallow ScrollView to intercept touch events.
-						observableScrollView.requestDisallowInterceptTouchEvent(true);
+						scrollView.requestDisallowInterceptTouchEvent(true);
 						// Disable touch on transparent view
 						return false;
 
 					case MotionEvent.ACTION_UP:
 						// Allow ScrollView to intercept touch events.
-						observableScrollView.requestDisallowInterceptTouchEvent(false);
+						scrollView.requestDisallowInterceptTouchEvent(false);
 						return true;
 
 					case MotionEvent.ACTION_MOVE:
-						observableScrollView.requestDisallowInterceptTouchEvent(true);
+						scrollView.requestDisallowInterceptTouchEvent(true);
 						return false;
 
 					default:
@@ -89,11 +95,11 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 		university.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(observableScrollView.getCurrentScrollY() > 100)
-					scrollObservableScrollViewTo(0);
+				if (currentScrollY > 100)
+					scrollTo(0);
 				else {
 					animateCameraTo(wroclawUniversityMarker.getPosition());
-					scrollObservableScrollViewTo(observableScrollView.getBottom());
+					scrollTo(scrollView.getBottom());
 				}
 			}
 		});
@@ -101,11 +107,11 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 		secondarySchool.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if(observableScrollView.getCurrentScrollY() > 100)
-					scrollObservableScrollViewTo(0);
+				if (currentScrollY > 100)
+					scrollTo(0);
 				else {
 					animateCameraTo(secondarySchoolMarker.getPosition());
-					scrollObservableScrollViewTo(observableScrollView.getBottom());
+					scrollTo(scrollView.getBottom());
 				}
 			}
 		});
@@ -115,12 +121,6 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 
 		ImageView secondaryImage = (ImageView) view.findViewById(R.id.secondary_image);
 		imageResizer.loadImage(R.drawable.ilo, secondaryImage);
-		ScrollUtils.addOnGlobalLayoutListener(observableScrollView, new Runnable() {
-			@Override
-			public void run() {
-				onScrollChanged(0, false, false);
-			}
-		});
 	}
 
 	private void animateCameraTo(LatLng position) {
@@ -128,15 +128,15 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 		mMap.animateCamera(cameraUpdate, 3000, null);
 	}
 
-	private void scrollObservableScrollViewTo(int scrollY) {
-		ValueAnimator valueAnimator = ValueAnimator.ofInt(observableScrollView.getCurrentScrollY(), scrollY);
+	private void scrollTo(int scrollY) {
+		ValueAnimator valueAnimator = ValueAnimator.ofInt(currentScrollY, scrollY);
 		valueAnimator.setDuration(500);
 		valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 			@Override
 			public void onAnimationUpdate(ValueAnimator animation) {
 				int progress = (int) animation.getAnimatedValue();
 
-				observableScrollView.scrollTo(0, progress);
+				scrollView.scrollTo(0, progress);
 			}
 		});
 		valueAnimator.start();
@@ -166,7 +166,8 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 		LatLng secondarySchool = new LatLng(51.5375181, 19.9985359);
 		MarkerOptions markerOptions1 = new MarkerOptions()
 				.position(secondarySchool)
-				.title(getString(R.string.I_LO_in_tomaszow));
+				.title(getString(R.string.I_LO_in_tomaszow))
+				.snippet(getString(R.string.in_tomaszow_maz));
 		secondarySchoolMarker = mMap.addMarker(markerOptions1);
 		centerCamera();
 	}
@@ -185,20 +186,5 @@ public class EducationFragment extends Fragment implements OnMapReadyCallback, O
 	@Override
 	public String toString() {
 		return "Edukacja";
-	}
-
-	@Override
-	public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-		university.setTranslationY(scrollY);
-		secondarySchool.setTranslationY(scrollY / 2);
-	}
-
-	@Override
-	public void onDownMotionEvent() {
-
-	}
-
-	@Override
-	public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 	}
 }

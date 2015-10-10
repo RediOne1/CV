@@ -62,7 +62,7 @@ public class ProgrammingLanguagesAdapter extends BaseAdapter {
 				imageView.setImageResource(R.drawable.filled_circle);
 			else
 				imageView.setImageResource(R.drawable.empty_circle);
-				viewHolder.languagesLinearLayout.addView(imageView);
+			viewHolder.languagesLinearLayout.addView(imageView);
 		}
 		return convertView;
 	}
